@@ -2,6 +2,8 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import "./App.css";
 
+import { nanoid } from "nanoid";
+
 function App() {
     const files = {
         children: [
@@ -49,7 +51,11 @@ function App() {
                 {isExpanded && (
                     <div style={{ paddingLeft: `${depth * 15}px` }}>
                         {entry.children?.map((entry) => (
-                            <Entry entry={entry} depth={depth + 1} />
+                            <Entry
+                                entry={entry}
+                                depth={depth + 1}
+                                key={nanoid()}
+                            />
                         ))}
                     </div>
                 )}
@@ -61,7 +67,7 @@ function App() {
         <div className="App">
             <div className="centralize">
                 {files.children.map((entry) => (
-                    <Entry entry={entry} depth={1} />
+                    <Entry entry={entry} depth={1} key={nanoid()} />
                 ))}
             </div>
         </div>
