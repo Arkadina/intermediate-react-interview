@@ -12,6 +12,9 @@ function App() {
                         name: "joi",
                         children: [
                             {
+                                name: "node_modules",
+                            },
+                            {
                                 name: "package.json",
                             },
                         ],
@@ -22,7 +25,7 @@ function App() {
                 name: "package.json",
             },
             {
-                name: "vite.config",
+                name: "vite.config.ts",
             },
         ],
     };
@@ -32,15 +35,35 @@ function App() {
         children?: TEntry[];
     };
 
-    function Entry({ name, children }: TEntry) {
-        return <div>{name}</div>;
+    function Entry({ entry, depth }: { entry: TEntry; depth: number }) {
+        const [isExpanded, setIsExpanded] = useState(false);
+        return (
+            <div>
+                <button
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    style={{ cursor: entry.children ? "pointer" : "initial" }}
+                >
+                    {entry.children && (isExpanded ? "- " : "+ ")}
+                    {entry.name}
+                </button>
+                {isExpanded && (
+                    <div style={{ paddingLeft: `${depth * 15}px` }}>
+                        {entry.children?.map((entry) => (
+                            <Entry entry={entry} depth={depth + 1} />
+                        ))}
+                    </div>
+                )}
+            </div>
+        );
     }
 
     return (
         <div className="App">
-            {files.children.map((entry) => (
-                <Entry {...entry} />
-            ))}
+            <div className="centralize">
+                {files.children.map((entry) => (
+                    <Entry entry={entry} depth={1} />
+                ))}
+            </div>
         </div>
     );
 }
